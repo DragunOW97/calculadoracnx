@@ -1,0 +1,332 @@
+<html><head><base href="https://conexaovip.com/calculadoras/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conexão VIP - Calculadoras Proporcionais</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<style>
+  :root {
+    --primary-color: #0056b3;
+    --secondary-color: #e60000;
+    --background-color: #f0f8ff;
+    --card-background: #ffffff;
+    --text-color: #333333;
+  }
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--background-color);
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .logo {
+    max-width: 250px;
+    height: auto;
+  }
+  h1, h2 {
+    color: var(--primary-color);
+    text-align: center;
+  }
+  .calculator-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 30px;
+  }
+  .calculator-card {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .calculator-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+  }
+  .calculator-card h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+  }
+  .calculator-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+  }
+  .calculator {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--primary-color);
+  }
+  input[type="number"], input[type="date"], input[type="datetime-local"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  button {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #004494;
+  }
+  .result {
+    margin-top: 15px;
+    font-weight: bold;
+    color: var(--secondary-color);
+  }
+  #backButton {
+    background-color: var(--secondary-color);
+    margin-bottom: 20px;
+  }
+  #backButton:hover {
+    background-color: #cc0000;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <img src="/a/9ebbd3d3-27e8-4bd9-a9c2-e6bd58ad8cf9" alt="Logo Conexão VIP" class="logo">
+    <h1>Calculadoras Proporcionais</h1>
+  </div>
+  
+  <div id="calculatorSelection" class="calculator-grid">
+    <div class="calculator-card" onclick="showCalculator('calc1')">
+      <div class="calculator-icon">📅</div>
+      <h3>Dias de Uso</h3>
+      <p>Calcule o valor proporcional com base nos dias de uso</p>
+    </div>
+    <div class="calculator-card" onclick="showCalculator('calc2')">
+      <div class="calculator-icon">🔄</div>
+      <h3>Mudança de Plano</h3>
+      <p>Calcule o valor na mudança entre planos</p>
+    </div>
+    <div class="calculator-card" onclick="showCalculator('calc3')">
+      <div class="calculator-icon">📆</div>
+      <h3>Mudança de Vencimento</h3>
+      <p>Calcule o valor ao mudar a data de vencimento</p>
+    </div>
+    <div class="calculator-card" onclick="showCalculator('calc4')">
+      <div class="calculator-icon">📄</div>
+      <h3>Multa Rescisória</h3>
+      <p>Calcule o valor da multa por cancelamento</p>
+    </div>
+    <div class="calculator-card" onclick="showCalculator('calc5')">
+      <div class="calculator-icon">⏱️</div>
+      <h3>Desconto por Dias Não Utilizados</h3>
+      <p>Calcule o desconto por período sem acesso</p>
+    </div>
+    <div class="calculator-card" onclick="showCalculator('calc6')">
+      <div class="calculator-icon">🔒</div>
+      <h3>Verificação de Refidelização</h3>
+      <p>Verifique se o cliente deve ser refidelizado</p>
+    </div>
+  </div>
+
+  <div id="calculatorContainer" style="display: none;">
+    <button id="backButton" onclick="showCalculatorSelection()">Voltar para Seleção</button>
+
+    <div id="calc1" class="calculator">
+      <h2>Cálculo Proporcional de Dias de Uso</h2>
+      <label for="valorBase1">Valor Base (R$):</label>
+      <input type="number" id="valorBase1" step="0.01" required>
+      <label for="ultimoVencimento1">Data do Último Vencimento Pago:</label>
+      <input type="date" id="ultimoVencimento1" required>
+      <label for="dataPagamento1">Data do Pagamento:</label>
+      <input type="date" id="dataPagamento1" required>
+      <button onclick="calcularDiasUso()">Calcular</button>
+      <div id="resultado1" class="result"></div>
+    </div>
+
+    <div id="calc2" class="calculator">
+      <h2>Cálculo Proporcional de Mudança de Plano</h2>
+      <label for="valorPlanoAntigo">Valor do Plano Antigo (R$):</label>
+      <input type="number" id="valorPlanoAntigo" step="0.01" required>
+      <label for="valorPlanoNovo">Valor do Plano Novo (R$):</label>
+      <input type="number" id="valorPlanoNovo" step="0.01" required>
+      <label for="ultimoVencimento2">Data do Último Vencimento Pago:</label>
+      <input type="date" id="ultimoVencimento2" required>
+      <label for="dataMudanca">Data da Mudança do Plano:</label>
+      <input type="date" id="dataMudanca" required>
+      <label for="proximoVencimento">Data do Próximo Vencimento:</label>
+      <input type="date" id="proximoVencimento" required>
+      <button onclick="calcularMudancaPlano()">Calcular</button>
+      <div id="resultado2" class="result"></div>
+    </div>
+
+    <div id="calc3" class="calculator">
+      <h2>Cálculo Proporcional de Mudança de Vencimento</h2>
+      <label for="valorPlano3">Valor do Plano (R$):</label>
+      <input type="number" id="valorPlano3" step="0.01" required>
+      <label for="ultimoVencimento3">Data do Último Vencimento Pago:</label>
+      <input type="date" id="ultimoVencimento3" required>
+      <label for="novoVencimento">Data do Novo Vencimento:</label>
+      <input type="date" id="novoVencimento" required>
+      <button onclick="calcularMudancaVencimento()">Calcular</button>
+      <div id="resultado3" class="result"></div>
+    </div>
+
+    <div id="calc4" class="calculator">
+      <h2>Cálculo da Multa Rescisória</h2>
+      <label for="dataAssinatura">Data da Assinatura do Contrato:</label>
+      <input type="date" id="dataAssinatura" required>
+      <label for="dataCancelamento">Data do Cancelamento:</label>
+      <input type="date" id="dataCancelamento" required>
+      <button onclick="calcularMultaRescisoria()">Calcular</button>
+      <div id="resultado4" class="result"></div>
+    </div>
+
+    <div id="calc5" class="calculator">
+      <h2>Cálculo de Desconto por Dias Não Utilizados</h2>
+      <label for="valorMensal">Valor Mensal do Plano (R$):</label>
+      <input type="number" id="valorMensal" step="0.01" required>
+      <label for="dataHoraInicio">Data e Hora de Início do Período Sem Acesso:</label>
+      <input type="datetime-local" id="dataHoraInicio" required>
+      <label for="dataHoraFim">Data e Hora de Retorno do Acesso:</label>
+      <input type="datetime-local" id="dataHoraFim" required>
+      <button onclick="calcularDescontoDiasNaoUtilizados()">Calcular</button>
+      <div id="resultado5" class="result"></div>
+    </div>
+
+    <div id="calc6" class="calculator">
+      <h2>Verificação de Refidelização</h2>
+      <label for="dataSuspensao">Data da Suspensão:</label>
+      <input type="date" id="dataSuspensao" required>
+      <label for="dataPagamentoReligamento">Data do Pagamento do Religamento:</label>
+      <input type="date" id="dataPagamentoReligamento" required>
+      <button onclick="verificarRefidelizacao()">Verificar</button>
+      <div id="resultado6" class="result"></div>
+    </div>
+  </div>
+
+<script>
+function showCalculator(calcId) {
+  document.getElementById('calculatorSelection').style.display = 'none';
+  document.getElementById('calculatorContainer').style.display = 'block';
+  document.querySelectorAll('.calculator').forEach(calc => {
+    calc.style.display = 'none';
+  });
+  document.getElementById(calcId).style.display = 'block';
+}
+
+function showCalculatorSelection() {
+  document.getElementById('calculatorSelection').style.display = 'grid';
+  document.getElementById('calculatorContainer').style.display = 'none';
+}
+
+function calcularDiasUso() {
+  const valorBase = parseFloat(document.getElementById('valorBase1').value);
+  const ultimoVencimento = moment(document.getElementById('ultimoVencimento1').value);
+  const dataPagamento = moment(document.getElementById('dataPagamento1').value);
+  
+  const diasUtilizados = dataPagamento.diff(ultimoVencimento, 'days');
+  const valorProporcional = (valorBase / 30) * diasUtilizados;
+  
+  document.getElementById('resultado1').innerHTML = `Valor proporcional: R$ ${valorProporcional.toFixed(2)}<br>Baseado em ${diasUtilizados} dias de utilização`;
+}
+
+function calcularMudancaPlano() {
+  const valorPlanoAntigo = parseFloat(document.getElementById('valorPlanoAntigo').value);
+  const valorPlanoNovo = parseFloat(document.getElementById('valorPlanoNovo').value);
+  const ultimoVencimento = moment(document.getElementById('ultimoVencimento2').value);
+  const dataMudanca = moment(document.getElementById('dataMudanca').value);
+  const proximoVencimento = moment(document.getElementById('proximoVencimento').value);
+  
+  const diasPlanoAntigo = dataMudanca.diff(ultimoVencimento, 'days');
+  const diasPlanoNovo = proximoVencimento.diff(dataMudanca, 'days');
+  
+  const valorProporcionalAntigo = (valorPlanoAntigo / 30) * diasPlanoAntigo;
+  const valorProporcionalNovo = (valorPlanoNovo / 30) * diasPlanoNovo;
+  
+  const valorTotal = valorProporcionalAntigo + valorProporcionalNovo;
+  const diasTotais = diasPlanoAntigo + diasPlanoNovo;
+  
+  document.getElementById('resultado2').innerHTML = `Valor proporcional: R$ ${valorTotal.toFixed(2)}<br>Baseado em ${diasTotais} dias de utilização (${diasPlanoAntigo} dias do plano antigo e ${diasPlanoNovo} dias do plano novo)`;
+}
+
+function calcularMudancaVencimento() {
+  const valorPlano = parseFloat(document.getElementById('valorPlano3').value);
+  const ultimoVencimento = moment(document.getElementById('ultimoVencimento3').value);
+  const novoVencimento = moment(document.getElementById('novoVencimento').value);
+  
+  const diasDiferenca = novoVencimento.diff(ultimoVencimento, 'days');
+  const valorProporcional = (valorPlano / 30) * diasDiferenca;
+  
+  document.getElementById('resultado3').innerHTML = `Valor proporcional: R$ ${valorProporcional.toFixed(2)}<br>Baseado em ${diasDiferenca} dias de diferença entre vencimentos`;
+}
+
+function calcularMultaRescisoria() {
+  const dataAssinatura = moment(document.getElementById('dataAssinatura').value);
+  const dataCancelamento = moment(document.getElementById('dataCancelamento').value);
+  
+  const diasContrato = dataCancelamento.diff(dataAssinatura, 'days');
+  const valorMultaTotal = 600;
+  let valorMulta;
+  
+  if (diasContrato <= 365) {
+    valorMulta = valorMultaTotal * (1 - (diasContrato / 365));
+  } else {
+    valorMulta = 0;
+  }
+  
+  document.getElementById('resultado4').innerHTML = `Valor da multa rescisória: R$ ${valorMulta.toFixed(2)}<br>Baseado em ${diasContrato} dias de contrato`;
+}
+
+function calcularDescontoDiasNaoUtilizados() {
+  const valorMensal = parseFloat(document.getElementById('valorMensal').value);
+  const dataHoraInicio = moment(document.getElementById('dataHoraInicio').value);
+  const dataHoraFim = moment(document.getElementById('dataHoraFim').value);
+  
+  const horasSemAcesso = dataHoraFim.diff(dataHoraInicio, 'hours', true);
+  const diasSemAcesso = horasSemAcesso / 24;
+  const valorDiario = valorMensal / 30;
+  const desconto = valorDiario * diasSemAcesso;
+  
+  document.getElementById('resultado5').innerHTML = `
+    Desconto calculado: R$ ${desconto.toFixed(2)}<br>
+    Baseado em ${horasSemAcesso.toFixed(2)} horas sem acesso (${diasSemAcesso.toFixed(2)} dias)<br>
+    Cálculo: (${valorMensal.toFixed(2)} / 30) * ${diasSemAcesso.toFixed(2)} = ${desconto.toFixed(2)}
+  `;
+}
+
+function verificarRefidelizacao() {
+  const dataSuspensao = moment(document.getElementById('dataSuspensao').value);
+  const dataPagamentoReligamento = moment(document.getElementById('dataPagamentoReligamento').value);
+  
+  const diferencaDias = dataPagamentoReligamento.diff(dataSuspensao, 'days');
+  
+  let resultado = '';
+  if (diferencaDias < 120) {
+    resultado = `O cliente NÃO deve ser refidelizado.<br>`;
+  } else {
+    resultado = `O cliente DEVE ser refidelizado.<br>`;
+  }
+  
+  resultado += `Diferença: ${diferencaDias} dias entre a suspensão e o pagamento do religamento.`;
+  
+  document.getElementById('resultado6').innerHTML = resultado;
+}
+</script>
+</body>
+</html>
